@@ -8,6 +8,8 @@ import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import java.math.RoundingMode
+import java.text.DecimalFormat
 
 
 class QuizActivity : AppCompatActivity() {
@@ -20,6 +22,7 @@ class QuizActivity : AppCompatActivity() {
     private var mPrevButton: ImageButton? = null
     private var mNextButton: ImageButton? = null
     private var mQuestionTextView: TextView? = null
+    private var mIsShowResult = false
     private val mQuestionBank = arrayOf(
         Question(R.string.question_australia, true),
         Question(R.string.question_oceans, true),
@@ -131,8 +134,10 @@ class QuizActivity : AppCompatActivity() {
             R.string.incorrect_toast
         }
         Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show()
+        mQuestionBank[mCurrentIndex].setAnswerResult(userPressedTrue == answerIsTrue)
         mQuestionBank[mCurrentIndex].setAnswerState(true)
         updateAnswerButtons()
+        checkShowResult()
     }
 
     private fun updateAnswerButtons() {
@@ -156,5 +161,45 @@ class QuizActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun checkShowResult() {
+        if (mIsShowResult) {
+            return
+        } else {
+            var shouldShowResult = true
+            for (i in mQuestionBank.indices) {
+                if (mQuestionBank[i].isAnswered() == false) {
+                    shouldShowResult = false
+                    break
+                }
+            }
+            if (shouldShowResult) {
+                mIsShowResult = true
+                var correctNumber = 0
+                for (i in mQuestionBank.indices) {
+                    if (mQuestionBank[i].isAnswerCorrect() == true) {
+                        ++correctNumber
+                    }
+                }
+                Toast.makeText(this, "result = ${getNoMoreThanTwoDigits(correctNumber * 100.0 / mQuestionBank.size)}%", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    /**
+     * 对入参保留最多两位小数(舍弃末尾的0)，如:
+     * 3.345->3.34
+     * 3.40->3.4
+     * 3.0->3
+     */
+    private fun getNoMoreThanTwoDigits(number: Double): String {
+        val format = DecimalFormat("0.##")
+        //未保留小数的舍弃规则，RoundingMode.FLOOR表示直接舍弃。
+        format.roundingMode = RoundingMode.FLOOR
+        return format.format(number)
+    }
+
+
+
 
 }
