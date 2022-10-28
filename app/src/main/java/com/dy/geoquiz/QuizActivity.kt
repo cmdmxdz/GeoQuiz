@@ -1,9 +1,9 @@
 package com.dy.geoquiz
 
 import android.os.Bundle
-import android.view.Gravity
 import android.view.View
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -13,8 +13,8 @@ class QuizActivity : AppCompatActivity() {
 
     private var mTrueButton: Button? = null
     private var mFalseButton: Button? = null
-    private var mPrevButton: Button? = null
-    private var mNextButton: Button? = null
+    private var mPrevButton: ImageButton? = null
+    private var mNextButton: ImageButton? = null
     private var mQuestionTextView: TextView? = null
     private val mQuestionBank = arrayOf(
         Question(R.string.question_australia, true),
