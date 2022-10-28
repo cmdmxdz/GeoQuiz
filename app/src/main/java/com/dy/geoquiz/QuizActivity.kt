@@ -42,12 +42,18 @@ class QuizActivity : AppCompatActivity() {
             checkAnswer(false)
         }
         mNextButton = findViewById<View>(R.id.next_button) as Button
-        mNextButton?.setOnClickListener(View.OnClickListener {
+        mNextButton?.setOnClickListener {
             mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.size
             val question = mQuestionBank[mCurrentIndex].getTextResId()!!
             mQuestionTextView!!.setText(question)
             updateQuestion()
-        })
+        }
+        mQuestionTextView?.setOnClickListener {
+            mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.size
+            val question = mQuestionBank[mCurrentIndex].getTextResId()!!
+            mQuestionTextView!!.setText(question)
+            updateQuestion()
+        }
         updateQuestion()
     }
 
