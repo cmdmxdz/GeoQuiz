@@ -13,6 +13,7 @@ class QuizActivity : AppCompatActivity() {
 
     private var mTrueButton: Button? = null
     private var mFalseButton: Button? = null
+    private var mPrevButton: Button? = null
     private var mNextButton: Button? = null
     private var mQuestionTextView: TextView? = null
     private val mQuestionBank = arrayOf(
@@ -41,17 +42,18 @@ class QuizActivity : AppCompatActivity() {
         mFalseButton?.setOnClickListener {
             checkAnswer(false)
         }
-        mNextButton = findViewById<View>(R.id.next_button) as Button
+        mPrevButton = findViewById(R.id.prev_button)
+        mPrevButton?.setOnClickListener {
+            mCurrentIndex = (mCurrentIndex + mQuestionBank.size - 1) % mQuestionBank.size
+            updateQuestion()
+        }
+        mNextButton = findViewById(R.id.next_button)
         mNextButton?.setOnClickListener {
             mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.size
-            val question = mQuestionBank[mCurrentIndex].getTextResId()!!
-            mQuestionTextView!!.setText(question)
             updateQuestion()
         }
         mQuestionTextView?.setOnClickListener {
             mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.size
-            val question = mQuestionBank[mCurrentIndex].getTextResId()!!
-            mQuestionTextView!!.setText(question)
             updateQuestion()
         }
         updateQuestion()
